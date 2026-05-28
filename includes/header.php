@@ -1,6 +1,16 @@
 <?php
 $pageTitle = $pageTitle ?? APP_NAME;
 $user = current_user();
+$scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
+$currentFile = basename($scriptName);
+$currentDir = basename(dirname($scriptName));
+$isAdminArea = $currentDir === 'admin';
+$navClass = static function (string $file, bool $adminArea = false) use ($currentFile, $isAdminArea): string {
+    if ($adminArea) {
+        return $isAdminArea ? ' class="active" aria-current="page"' : '';
+    }
+    return (!$isAdminArea && $currentFile === $file) ? ' class="active" aria-current="page"' : '';
+};
 ?>
 <!doctype html>
 <html lang="en" translate="no" class="notranslate">
@@ -19,21 +29,21 @@ $user = current_user();
     </a>
     <nav class="nav">
         <?php if ($user): ?>
-            <a href="<?= e(url('index.php')) ?>">Items</a>
-            <a href="<?= e(url('post_item.php')) ?>">Post Item</a>
-            <a href="<?= e(url('my_posts.php')) ?>">My Posts</a>
-            <a href="<?= e(url('messages.php')) ?>">Messages</a>
+            <a<?= $navClass('index.php') ?> href="<?= e(url('index.php')) ?>">Items</a>
+            <a<?= $navClass('post_item.php') ?> href="<?= e(url('post_item.php')) ?>">Post Item</a>
+            <a<?= $navClass('my_posts.php') ?> href="<?= e(url('my_posts.php')) ?>">My Posts</a>
+            <a<?= $navClass('messages.php') ?> href="<?= e(url('messages.php')) ?>">Messages</a>
             <?php if (is_admin()): ?>
-                <a href="<?= e(url('admin/index.php')) ?>">Admin</a>
+                <a<?= $navClass('admin/index.php', true) ?> href="<?= e(url('admin/index.php')) ?>">Admin</a>
             <?php endif; ?>
             <span class="user-chip"><?= e($user['name']) ?></span>
             <a href="<?= e(url('logout.php')) ?>">Logout</a>
         <?php else: ?>
-            <a href="<?= e(url('login.php')) ?>">Login</a>
-            <a class="button small" href="<?= e(url('register.php')) ?>">Register</a>
+            <a<?= $navClass('login.php') ?> href="<?= e(url('login.php')) ?>">Login</a>
+            <a class="button small<?= (!$isAdminArea && $currentFile === 'register.php') ? ' active' : '' ?>" href="<?= e(url('register.php')) ?>">Register</a>
         <?php endif; ?>
     </nav>
 </header>
 <?php foreach (consume_flash() as $message): ?>
-    <div class="flash <?= e($message['type']) ?>"><?= e($message['message']) ?></div>
+    <div class="flash <?= e($message['type']) ?>" role="status" aria-live="polite"><?= e($message['message']) ?></div>
 <?php endforeach; ?>

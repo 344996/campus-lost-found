@@ -38,30 +38,30 @@ include __DIR__ . '/includes/header.php';
     </section>
 
     <form class="filter-bar" method="get">
-        <input type="search" name="q" placeholder="Search name, description, category, color, shape, size, weight" value="<?= e($_GET['q'] ?? '') ?>">
-        <select name="type">
+        <input type="search" name="q" aria-label="Search keywords" placeholder="Search name, description, category, color, shape, size, weight" value="<?= e($_GET['q'] ?? '') ?>">
+        <select name="type" aria-label="Filter by post type">
             <option value="">All Types</option>
             <option value="lost" <?= (($_GET['type'] ?? '') === 'lost') ? 'selected' : '' ?>>Lost</option>
             <option value="found" <?= (($_GET['type'] ?? '') === 'found') ? 'selected' : '' ?>>Found</option>
         </select>
-        <select name="category_id">
+        <select name="category_id" aria-label="Filter by category">
             <option value="">All Categories</option>
             <?php foreach ($cats as $cat): ?>
                 <option value="<?= (int) $cat['id'] ?>" <?= (string) ($_GET['category_id'] ?? '') === (string) $cat['id'] ? 'selected' : '' ?>><?= e($cat['name']) ?></option>
             <?php endforeach; ?>
         </select>
-        <select name="location">
+        <select name="location" aria-label="Filter by location">
             <option value="">All Locations</option>
             <?php foreach ($locations as $location): ?>
                 <option value="<?= e($location) ?>" <?= (string) ($_GET['location'] ?? '') === $location ? 'selected' : '' ?>><?= e($location) ?></option>
             <?php endforeach; ?>
         </select>
-        <input type="text" name="color" placeholder="Color" value="<?= e($_GET['color'] ?? '') ?>">
-        <input type="text" name="shape" placeholder="Shape" value="<?= e($_GET['shape'] ?? '') ?>">
-        <input type="text" name="item_size" placeholder="Size" value="<?= e($_GET['item_size'] ?? '') ?>">
-        <input type="text" name="estimated_weight" placeholder="Weight" value="<?= e($_GET['estimated_weight'] ?? '') ?>">
-        <input type="date" name="date_from" value="<?= e($_GET['date_from'] ?? '') ?>">
-        <input type="date" name="date_to" value="<?= e($_GET['date_to'] ?? '') ?>">
+        <input type="text" name="color" aria-label="Filter by color" placeholder="Color" value="<?= e($_GET['color'] ?? '') ?>">
+        <input type="text" name="shape" aria-label="Filter by shape" placeholder="Shape" value="<?= e($_GET['shape'] ?? '') ?>">
+        <input type="text" name="item_size" aria-label="Filter by size" placeholder="Size" value="<?= e($_GET['item_size'] ?? '') ?>">
+        <input type="text" name="estimated_weight" aria-label="Filter by estimated weight" placeholder="Weight" value="<?= e($_GET['estimated_weight'] ?? '') ?>">
+        <input type="date" name="date_from" aria-label="Filter from date" value="<?= e($_GET['date_from'] ?? '') ?>">
+        <input type="date" name="date_to" aria-label="Filter to date" value="<?= e($_GET['date_to'] ?? '') ?>">
         <button class="button" type="submit">Filter</button>
         <a class="button ghost" href="<?= e(url('index.php')) ?>">Reset</a>
     </form>
